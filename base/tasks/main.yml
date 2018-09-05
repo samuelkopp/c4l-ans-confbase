@@ -1,0 +1,16 @@
+---
+# tasks file for base
+
+- name: install ntp
+  package:
+    name: ntp
+    state: present
+
+- name: update /etc/hosts
+  blockinfile:
+    path: /etc/hosts
+    block: |
+      {{ hostvars[item].ansible_ssh_host }} {{ item }}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item }}"
+  loop: "{{ groups.all }}"
+  
